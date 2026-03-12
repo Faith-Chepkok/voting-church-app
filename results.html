@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Voting Results</title>
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Voting Results</h2>
+
+<table>
+
+<tr>
+<th>Group</th>
+<th>Votes</th>
+</tr>
+
+{% for group in results %}
+
+<tr>
+<td>{{group[0]}}</td>
+<td>{{group[1]}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>
