@@ -52,7 +52,7 @@ if not email: return redirect("/login")
     existing = db.execute("SELECT * FROM votes WHERE member_email=?,(email,)).fetchone()
                           if existing: return "You have already voted."
     if request.method=="POST":
-        group = request.form["group"]
+        group = random.form["group"]
         db.execute("INSERT INTO votes(member_email,group_name) VALUES(?)",(email,group,))
         db.commit()
         return redirect("/results")
