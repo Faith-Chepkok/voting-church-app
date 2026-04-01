@@ -44,23 +44,7 @@ def vote():
         "Ligure","Jade","Helecidoni","Lulu","Akiki",
         "Jasi","Zumaradi","Taluku","Yakuti","Almasi"
     ]
-    @app.route("/vote", methods=["GET","POST"])
-    def vote():
-        db = get_db()
-        email = session.get("user")
-        if not email: 
-            return redirect("/login")
-        existing = db.execute("SELECT * FROM votes WHERE member_email=?",(email,)).fetchone()
-        if existing: 
-            return "You have already voted."
-        if request.method == "POST":
-            group = random.form["group"]
-            db.execute("INSERT INTO votes(member_email,group_name) VALUES(?)",(email,group,))
-            db.commit()
-            return redirect("/results")
-        random_group = random.choice(groups)
-        return render_template("vote.html", groups=groups, random_group=random_group)
-@app.route("/admin", methods=["GET","POST"])
+              
 def admin():
     if request.method=="POST":
         username = request.form["username"]
