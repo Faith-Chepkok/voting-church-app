@@ -49,7 +49,7 @@ def vote():
     db = get_db()
     email = session.get("user")
 if not email: return redirect("/login")
-    existing = db.execute("SELECT * FROM votes WHERE member_email=?,(email,)).fetchone()
+    existing = db.execute("SELECT * FROM votes WHERE member_email=?",(email,)).fetchone()
                           if existing: return "You have already voted."
     if request.method == "POST":
         group = random.form["group"]
