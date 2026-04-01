@@ -44,7 +44,7 @@ def vote():
         "Ligure","Jade","Helecidoni","Lulu","Akiki",
         "Jasi","Zumaradi","Taluku","Yakuti","Almasi"
     ]
-              
+@app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
         username = request.form["username"]
