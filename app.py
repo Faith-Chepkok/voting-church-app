@@ -35,6 +35,20 @@ def login():
     return render_template("login.html")
 @app.route("/vote", methods=["GET","POST"])
 def vote():
+    db=get_db()
+    email=session.get("user")
+    if not email:
+        return redirect("/login")
+    existing=db.execute("SELECT*FROM votes WHERE member_email=?",(email,)).fetchone
+    if existing:
+        return "You have already voted."
+    if request.method=="POST":
+        group=request.form["group"]
+        db.execute("INSERT INTO votes9member_email,group_name)VALUES(?,?)"(email,group))
+        db.commit()
+        return redirect("/results")
+    random_group=random.choice(groups)
+    return render_template("vote.html",group=groups,random_group=random_group)
     groups = [
         "Beryl","Chrystolite","Coral","Amber","Lapiz Lazuli",
         "Ruby","Carnelian","Topaz","Pearl","Sardonyx",
