@@ -8,53 +8,16 @@
 <body>
 
 <div class="container">
-<h2>Church Voting System</h2>
-<h3>Vote for Your Group</h3>
+<h1>Church Voting System</h1>
+<h2>Your Assigned Group</h2>
 <form method="POST">
-<label>Select Group</label>
-<select name="group">
-
-<option value="Beryl">Beryl</option>
-<option value="Chrystolite">Chrystolite</option>
-<option value="Coral">Coral</option>
-<option value="Amber">Amber</option>
-<option value="Lapiz lazuli">Lapiz lazuli</option>
-<option value="Ruby">Ruby</option>
-<option value="Carnelian">Carnelian</option>
-<option value="Topaz">Topaz</option>
-<option value="Pearl">Pearl</option>
-<option value="Sardonyx">Sardonyx</option>
-<option value="Sapphire">Sapphire</option>
-<option value="Amethyst">Amethyst</option>
-<option value="Jacinth">Jacinth</option>
-<option value="Turquoise">Turquoise</option>
-<option value="Garnet">Garnet</option>
-<option value="Crystal">Crystal</option>
-<option value="Onyx">Onyx</option>
-<option value="Jasper">Jasper</option>
-<option value="Leshem">Leshem</option>
-<option value="Agate">Agate</option>
-<option value="Emerald">Emerald</option>
-<option value="Chalcedony">Chalcedony</option>
-<option value="Peridot">Peridot</option>
-<option value="Sardius">Sardius</option>
-<option value="Chrysoprase">Chrysoprase</option>
-<option value="Ligure">Ligure</option>
-<option value="Jade">Jade</option>
-<option value="Helecidoni">Helecidoni</option>
-<option value="Lulu">Lulu</option>
-<option value="Akiki">Akiki</option>
-<option value="Jasi">Jasi</option>
-<option value="Zumaradi">Zumaradi</option>
-<option value="Taluku">Taluku</option>
-<option value="Yakuti">Yakuti</option>
-<option value="Almasi">Almasi</option>
-
-</select>
-
-<br><br>
+<p><b>{{random_group}}</b></p>
+  <input type="hidden" name="group"
+    value="{{random_group}}">
 <button type="submit">Submit Vote</button>
 </form>
+  <br>
+  <a href="/">Back to Home</a>
 </div>
 
 </body>
