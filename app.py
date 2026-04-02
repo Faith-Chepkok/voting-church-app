@@ -6,8 +6,12 @@ app = Flask(__name__)
 
 def get_db():
     conn = sqlite3.connect("voting.db")
-    conn.row_factory = sqlite3.Row
-    return conn
+    conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
+    conn.execute('''CREATE TABLE IF NOT EXIST votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
+    conn.commit()
+    conn.close()
+    
+    create_tables()
 @app.route("/")
 def home():
     return render_template("index.html")
