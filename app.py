@@ -45,7 +45,7 @@ def vote():
         return "You have already voted."
     if request.method=="POST":
         group=request.form.get["group"]
-        db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)"(email,group))
+        db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)",(email,group))
         db.commit()
         return redirect("/results")
     random_group=random.choice(groups)
