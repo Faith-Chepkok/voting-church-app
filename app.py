@@ -14,9 +14,9 @@ def home():
 @app.route("/register", methods=["GET","POST"])
 def register():
     if request.method == "POST":
-        name = request.form["name"]
-        email = request.form["email"]
-        password = request.form["password"]
+        name = request.form.get["name"]
+        email = request.form.get["email"]
+        password = request.form.get["password"]
         db = get_db()
         db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
         db.commit()
@@ -26,11 +26,12 @@ def register():
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
+        email = request.form.get["email"]
+        password = request.form.get["password"]
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
         if user:
+            session["user"] = email
             return redirect("/vote")
     return render_template("login.html")
 @app.route("/vote", methods=["GET","POST"])
@@ -43,8 +44,8 @@ def vote():
     if existing:
         return "You have already voted."
     if request.method=="POST":
-        group=request.form["group"]
-        db.execute("INSERT INTO votes9member_email,group_name)VALUES(?,?)"(email,group))
+        group=request.form.get["group"]
+        db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)"(email,group))
         db.commit()
         return redirect("/results")
     random_group=random.choice(groups)
@@ -61,8 +62,8 @@ def vote():
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form.get["username"]
+        password = request.form.get["password"]
         if username=="admin" and password=="admin123":
             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
