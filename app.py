@@ -14,9 +14,9 @@ def home():
 @app.route("/register", methods=["GET","POST"])
 def register():
     if request.method == "POST":
-        name = request.form.get["name"]
-        email = request.form.get["email"]
-        password = request.form.get["password"]
+        name = request.form.get("name")
+        email = request.form.get("email")
+        password = request.form.get("password")
         db = get_db()
         db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
         db.commit()
@@ -44,7 +44,7 @@ def vote():
     if existing:
         return "You have already voted."
     if request.method=="POST":
-        group=request.form.get["group"]
+        group=request.form.get("group")
         db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)",(email,group))
         db.commit()
         return redirect("/results")
@@ -62,8 +62,8 @@ def vote():
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
-        username = request.form.get["username"]
-        password = request.form.get["password"]
+        username = request.form.get("username")
+        password = request.form.get("password")
         if username=="admin" and password=="admin123":
             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
