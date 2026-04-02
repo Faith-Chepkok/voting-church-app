@@ -26,8 +26,8 @@ def register():
 @app.route("/login", methods=["GET","POST"])
 def login():
     if request.method == "POST":
-        email = request.form.get["email"]
-        password = request.form.get["password"]
+        email = request.form.get("email")
+        password = request.form.get("password")
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
         if user:
