@@ -4,10 +4,10 @@ import random
 
 app = Flask(__name__)
 
-def get_db():
+def create_tables():
     conn = sqlite3.connect("voting.db")
     conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
-    conn.execute('''CREATE TABLE IF NOT EXIST votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
+    conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
     conn.commit()
     conn.close()
     
