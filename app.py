@@ -3,7 +3,7 @@ import sqlite3
 import random
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey'
+app.secret_key = "supersecretkey"
 
 def create_tables():
     conn = sqlite3.connect("voting.db")
