@@ -53,8 +53,8 @@ def vote():
         db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)",(email,group))
         db.commit()
         return redirect("/results")
-    random_group=random.choice(groups)
-    return render_template("vote.html",group=groups,random_group=random_group)
+    random_name=random.choice(groups)
+    return render_template("vote.html",existing=existing)
     groups = [
         "Beryl","Chrystolite","Coral","Amber","Lapiz Lazuli",
         "Ruby","Carnelian","Topaz","Pearl","Sardonyx",
@@ -70,7 +70,7 @@ def admin():
         username = request.form.get("username")
         password = request.form.get("password")
         if username=="admin" and password=="admin123":
-            return redirect("/admin_dashboard")
+            session["admin"]=True             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
 @app.route("/admin_dashboard")
 def admin_dashboard():
