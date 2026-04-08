@@ -50,13 +50,13 @@ def login():
 
     @app.route("/vote", methods=["GET", "POST"])
 def vote():
-    db = get_db()
+  db = get_db()
     email = session.get("user")
     if not email:
         return redirect("/login")
     existing = db.execute("SELECT * FROM votes WHERE member_email=?", (email,)).fetchone()
 
-    if request.method == "POST":
+  if request.method == "POST":
         if existing:
             return "You have already voted."
 
@@ -66,7 +66,7 @@ def vote():
         db.commit()
         return redirect("/results")
 
-    return render_template("vote.html", existing=existing)
+ return render_template("vote.html", existing=existing)
 
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
