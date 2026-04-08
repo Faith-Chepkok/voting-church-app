@@ -14,11 +14,11 @@ app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 def create_tables():
-    conn = sqlite3.connect("voting.db")
-    conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
-    conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
-    conn.commit()
-    conn.close()
+ conn = sqlite3.connect("voting.db")
+ conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
+ conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
+ conn.commit()
+ conn.close()
     
     create_tables()
 @app.route("/")
@@ -26,7 +26,7 @@ def home():
     return render_template("index.html")
 @app.route("/register", methods=["GET","POST"])
 def register():
-    if request.method == "POST":
+  if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
         password = request.form.get("password")
@@ -38,12 +38,12 @@ def register():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
-    if request.method == "POST":
+  if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
-        if user:
+ if user:
             session["user"] = email
     return redirect("/vote")
     return render_template("login.html")
