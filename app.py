@@ -1,7 +1,15 @@
 from flask import Flask,render_template,request,redirect,session
 import sqlite3
 import random
-
+groups = [
+        "Beryl","Chrystolite","Coral","Amber","Lapiz Lazuli",
+        "Ruby","Carnelian","Topaz","Pearl","Sardonyx",
+        "Sapphire","Amethyst","Jacinth","Turquoise","Garnet",
+        "Crystal","Onyx","Jasper","Leshem","Agate",
+        "Emerald","Chalcedony","Peridot","Sardius","Chrysoprase",
+        "Ligure","Jade","Helecidoni","Lulu","Akiki",
+        "Jasi","Zumaradi","Taluku","Yakuti","Almasi"
+]
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
@@ -25,7 +33,7 @@ def register():
         db = get_db()
         db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
         db.commit()
-        return redirect("/login")
+    return redirect("/login")
     return render_template("register.html")
 
 @app.route("/login", methods=["GET","POST"])
@@ -37,7 +45,7 @@ def login():
         user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
         if user:
             session["user"] = email
-            return redirect("/vote")
+    return redirect("/vote")
     return render_template("login.html")
 @app.route("/vote", methods=["GET","POST"])
 def vote():
@@ -52,18 +60,10 @@ def vote():
         group=request.form.get("group")
         db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)",(email,group))
         db.commit()
-        return redirect("/results")
+    return redirect("/results")
     random_name=random.choice(groups)
     return render_template("vote.html",existing=existing)
-    groups = [
-        "Beryl","Chrystolite","Coral","Amber","Lapiz Lazuli",
-        "Ruby","Carnelian","Topaz","Pearl","Sardonyx",
-        "Sapphire","Amethyst","Jacinth","Turquoise","Garnet",
-        "Crystal","Onyx","Jasper","Leshem","Agate",
-        "Emerald","Chalcedony","Peridot","Sardius","Chrysoprase",
-        "Ligure","Jade","Helecidoni","Lulu","Akiki",
-        "Jasi","Zumaradi","Taluku","Yakuti","Almasi"
-    ]
+    
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
