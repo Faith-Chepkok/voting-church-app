@@ -32,8 +32,8 @@ def register():
      db = get_db()
      db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
      db.commit()
- return redirect("/login")
- return render_template("register.html")
+  return redirect("/login")
+  return render_template("register.html")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -47,7 +47,7 @@ def login():
         return redirect("/vote")
     return render_template("login.html")
 
-    @app.route("/vote", methods=["GET", "POST"])
+@app.route("/vote", methods=["GET", "POST"])
 def vote():
   db = get_db()
   email = session.get("user")
@@ -69,7 +69,7 @@ def vote():
 
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
-    if request.method=="POST":
+  if request.method=="POST":
     username = request.form.get("username")
     password = request.form.get("password")
     if username=="admin" and password=="admin123":
