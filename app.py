@@ -14,68 +14,67 @@ app = Flask(__name__)
 app.secret_key = "supersecretkey"
 
 def create_tables():
- conn = sqlite3.connect("voting.db")
- conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
- conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
- conn.commit()
- conn.close()
-    
-    create_tables()
+  conn = sqlite3.connect("voting.db")
+  conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
+  conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
+  conn.commit()
+  conn.close()
+create_tables()
 @app.route("/")
 def home():
     return render_template("index.html")
 @app.route("/register", methods=["GET","POST"])
 def register():
   if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        db = get_db()
-        db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
-        db.commit()
-    return redirect("/login")
-    return render_template("register.html")
+     name = request.form.get("name")
+     email = request.form.get("email")
+     password = request.form.get("password")
+     db = get_db()
+     db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
+     db.commit()
+ return redirect("/login")
+ return render_template("register.html")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
   if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
-        db = get_db()
-        user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
- if user:
-            session["user"] = email
-    return redirect("/vote")
+     email = request.form.get("email")
+     password = request.form.get("password")
+     db = get_db()
+     user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
+     if user:
+        session["user"] = email
+        return redirect("/vote")
     return render_template("login.html")
 
     @app.route("/vote", methods=["GET", "POST"])
 def vote():
   db = get_db()
-    email = session.get("user")
-    if not email:
-        return redirect("/login")
+  email = session.get("user")
+  if not email:
+     return redirect("/login")
     existing = db.execute("SELECT * FROM votes WHERE member_email=?", (email,)).fetchone()
 
   if request.method == "POST":
-        if existing:
-            return "You have already voted."
+  if existing:
+     return "You have already voted."
 
-        random_name = random.choice(groups)
+     random_name = random.choice(groups)
         
-        db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, random_name))
-        db.commit()
-        return redirect("/results")
+     db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, random_name))
+     db.commit()
+     return redirect("/results")
 
- return render_template("vote.html", existing=existing)
+  return render_template("vote.html", existing=existing)
 
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        if username=="admin" and password=="admin123":
-            session["admin"]=True             return redirect("/admin_dashboard")
-    return render_template("admin_login.html")
+    username = request.form.get("username")
+    password = request.form.get("password")
+    if username=="admin" and password=="admin123":
+       session["admin"]=True             return redirect("/admin_dashboard")
+return render_template("admin_login.html")
 @app.route("/admin_dashboard")
 def admin_dashboard():
     db = get_db()
@@ -83,12 +82,12 @@ def admin_dashboard():
     users_count = users_row[0]if users_row else 0
     votes_row = db.execute("SELECT COUNT(*)FROM votes").fetchone()
     votes_count = votes_row[0]if votes_row else 0
-    return render_template("admin_dashboard.html",total_users=users_count, total_votes=votes_count)
+ return render_template("admin_dashboard.html",total_users=users_count, total_votes=votes_count)
 @app.route("/results")
 def results():
     db = get_db()
     results = db.execute("SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name").fetchall()
-    return render_template("results.html", results=results)
+return render_template("results.html", results=results)
 
 if __name__=="__main__":
     app.run(debug=True)
