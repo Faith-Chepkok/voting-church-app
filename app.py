@@ -47,23 +47,27 @@ def login():
             session["user"] = email
     return redirect("/vote")
     return render_template("login.html")
-@app.route("/vote", methods=["GET","POST"])
+
+    @app.route("/vote", methods=["GET", "POST"])
 def vote():
-    db=get_db()
-    email=session.get("user")
+    db = get_db()
+    email = session.get("user")
     if not email:
         return redirect("/login")
-    existing=db.execute("SELECT*FROM votes WHERE member_email=?",(email,)).fetchone
-    if existing:
-        return "You have already voted."
-    if request.method=="POST":
-        group=request.form.get("group")
-        db.execute("INSERT INTO votes member_email,group_name)VALUES(?,?)",(email,group))
+    existing = db.execute("SELECT * FROM votes WHERE member_email=?", (email,)).fetchone()
+
+    if request.method == "POST":
+        if existing:
+            return "You have already voted."
+
+        random_name = random.choice(groups)
+        
+        db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, random_name))
         db.commit()
-    return redirect("/results")
-    random_name=random.choice(groups)
-    return render_template("vote.html",existing=existing)
-    
+        return redirect("/results")
+
+    return render_template("vote.html", existing=existing)
+
 @app.route("/admin", methods=["GET","POST"])         
 def admin():
     if request.method=="POST":
