@@ -2,11 +2,14 @@ from flask import Flask, render_template, request, redirect, session
 import random
 
 app = Flask(__name__)
-app.secret_key = "super_secret_key" # Added for session support
+app.secret_key = "super_secret_key" 
+@app.route("/")
+def home():
+    return redirect 
 
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
-    # Assuming 'existing', 'groups', 'email', and 'db' are defined/handled elsewhere
+    
     if request.method == "POST":
         if existing:
             return "You have already voted."
@@ -46,7 +49,7 @@ def admin_dashboard():
 @app.route("/results")
 def results():
     db = get_db()
-    # Fixed the line break in the SQL string
+    
     query = "SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name"
     results = db.execute(query).fetchall()
     return render_template("results.html", results=results)
