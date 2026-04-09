@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+⁸from flask import Flask, render_template, request, redirect, session
 import random
 
 app = Flask(__name__)
@@ -10,7 +10,7 @@ def home():
 
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
-    
+  existing=False    
     if request.method == "POST":
         if existing:
             return "You have already voted."
