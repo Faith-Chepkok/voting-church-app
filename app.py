@@ -10,18 +10,24 @@ def home():
 
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
-  existing=False    
+    db = get_db()
+    
+    existing = False 
+
     if request.method == "POST":
         if existing:
             return "You have already voted."
 
-        random_name = random.choice(groups)
+        groups = ["Group A", "Group B"] 
+        email = "test@example.com"     
         
+        random_name = random.choice(groups)
         db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, random_name))
         db.commit()
         return redirect("/results")
 
     return render_template("vote.html", existing=existing)
+
 
 @app.route("/admin", methods=["GET", "POST"])         
 def admin():
