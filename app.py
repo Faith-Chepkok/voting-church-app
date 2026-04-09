@@ -1,60 +1,3 @@
-from flask import Flask,render_template,request,redirect,session
-import sqlite3
-import random
-groups = [
-        "Beryl","Chrystolite","Coral","Amber","Lapiz Lazuli",
-        "Ruby","Carnelian","Topaz","Pearl","Sardonyx",
-        "Sapphire","Amethyst","Jacinth","Turquoise","Garnet",
-        "Crystal","Onyx","Jasper","Leshem","Agate",
-        "Emerald","Chalcedony","Peridot","Sardius","Chrysoprase",
-        "Ligure","Jade","Helecidoni","Lulu","Akiki",
-        "Jasi","Zumaradi","Taluku","Yakuti","Almasi"
-]
-app = Flask(__name__)
-app.secret_key = "supersecretkey"
-
-def create_tables():
-  conn = sqlite3.connect("voting.db")
-  conn.execute('''CREATE TABLE IF NOT EXISTS users(id INTERGER PRIMARY KEY AUTOINCREMENT,nameTEXT,emailTEXT,passwordTEXT)''')
-  conn.execute('''CREATE TABLE IF NOT EXISTS votes(id INTERGER PRIMARY KEY AUTOINCREMENT, member_emailTEXT,group_nameTEXT)''')
-  conn.commit()
-  conn.close()
-create_tables()
-@app.route("/")
-def home():
-    return render_template("index.html")
-@app.route("/register", methods=["GET","POST"])
-def register():
-  if request.method == "POST":
-     name = request.form.get("name")
-     email = request.form.get("email")
-     password = request.form.get("password")
-     db = get_db()
-     db.execute("INSERT INTO users(name,email,password) VALUES(?,?,?)", (name,email,password))
-     db.commit()
-  return redirect("/login")
-  return render_template("register.html")
-
-@app.route("/login", methods=["GET","POST"])
-def login():
-  if request.method == "POST":
-     email = request.form.get("email")
-     password = request.form.get("password")
-     db = get_db()
-     user = db.execute("SELECT * FROM users WHERE email=? AND password=?", (email,password)).fetchone()
-     if user:
-        session["user"] = email
-        return redirect("/vote")
-    return render_template("login.html")
-
-@app.route("/vote", methods=["GET", "POST"])
-def vote():
-  db = get_db()
-  email = session.get("user")
-  if not email:
-     return redirect("/login")
-    existing = db.execute("SELECT * FROM votes WHERE member_email=?", (email,)).fetchone()
-
   if request.method == "POST":
   if existing:
      return "You have already voted."
@@ -93,3 +36,4 @@ return render_template("results.html", results=results)
 
 if __name__=="__main__":
     app.run(debug=True)
+
