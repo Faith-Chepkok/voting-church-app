@@ -5,7 +5,8 @@ app = Flask(__name__)
 app.secret_key = "super_secret_key" 
 @app.route("/")
 def home():
-    return redirect 
+    return redirect("/vote")
+
 
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
