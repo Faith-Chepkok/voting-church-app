@@ -8,6 +8,30 @@ def get_db():
     db = sqlite3.connect('database.db')
     db.row_factory = sqlite3.Row
     return db
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        db = get_db()
+        user = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password)).fetchone()
+        db.close()
+        
+        if user:
+            session["user_id"] = user[0] 
+            return redirect("/") 
+        else:
+            return "Invalid email or password", 401
+            
+    return render_template("login.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        return redirect("/")
+    return render_template("register.html")
+
 
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
