@@ -11,6 +11,14 @@ def home():
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
     db = get_db()
+    import sqlite3
+
+def get_db():
+    
+    db = sqlite3.connect('database.db')
+    db.row_factory = sqlite3.Row
+    return db
+
     
     existing = False 
 
