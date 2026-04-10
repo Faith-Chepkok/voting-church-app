@@ -55,11 +55,6 @@ def login():
         return "Invalid Login", 401
     return render_template("login.html")
 
-
-@app.route("/")
-def home():
-    return render_template("vote.html")
-
 @app.route("/vote", methods=["POST"])
 def vote():
     groups = [
