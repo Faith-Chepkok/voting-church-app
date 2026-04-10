@@ -56,7 +56,7 @@ def login():
     return render_template("login.html")
 
 @app.route("/vote", methods=["POST"])
-def vote():
+def cast_vote():
     groups = [
         "Beryl", "Chrystolite", "Coral", "Amber", "Lapiz Lazuli", 
         "Ruby", "Carnelian", "Topaz", "Pearl", "Sardonyx", 
