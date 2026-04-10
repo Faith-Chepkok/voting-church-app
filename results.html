@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-
-<title>Voting Results</title>
-<link rel="stylesheet" href="/static/style.css">
-
-</head>
-
 <body>
+    <h1>Voting Results</h1>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Group Name</th>
+                <th>Total Votes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                <td>{{ row['group_name'] }}</td>
+                <td>{{ row['total'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<div class="container">
-
-<h2>Voting Results</h2>
-
-<table>
-
-<tr>
-<th>Group</th>
-<th>Votes</th>
-</tr>
-
-{% for group in results %}
-
-<tr>
-<td>{{group[0]}}</td>
-<td>{{group[1]}}</td>
-</tr>
-
-{% endfor %}
-
-</table>
-
-</div>
-
+    <p><a href="/">Back to Vote</a></p>
 </body>
 </html>
