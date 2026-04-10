@@ -3,7 +3,7 @@ import random
 from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__)
-app.secret_key = "super_secret_key"
+app.secret_key = "super_secret_key_123"
 
 def get_db():
     db = sqlite3.connect('database.db')
@@ -22,6 +22,7 @@ def init_db():
                    password TEXT)''')
     db.commit()
     db.close()
+
 init_db()
 
 @app.route("/")
@@ -39,9 +40,8 @@ def vote():
         "Ligure", "Jade", "Helecidoni", "lulu", "Akiki", 
         "Jasi", "Zumaradi", "Taluku", "Yakuti", "Almasi"
     ]
-
-    assigned_group = random.choice(groups)
     
+    assigned_group = random.choice(groups)
     email = session.get("user_email", "guest@example.com")
     
     db = get_db()
@@ -51,21 +51,19 @@ def vote():
     db.close()
     
     return redirect("/results")
-
 @app.route("/results")
 def results():
     db = get_db()
     query = "SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name ORDER BY total DESC"
-    results = db.execute(query).fetchall()
+    res = db.execute(query).fetchall()
     db.close()
-    return render_template("results.html", results=results)
-
+    return render_template("results.html", results=res)
 @app.route("/admin", methods=["GET", "POST"])         
 def admin():
     if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        if username == "admin" and password == "admin123":
+        u = request.form.get("username")
+        p = request.form.get("password")
+        if u == "admin" and p == "admin123":
             session["admin"] = True
             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
@@ -74,18 +72,15 @@ def admin():
 def admin_dashboard():
     if not session.get("admin"):
         return redirect("/admin")
-        
     db = get_db()
-    users_row = db.execute("SELECT COUNT(*) FROM users").fetchone()
-    votes_row = db.execute("SELECT COUNT(*) FROM votes").fetchone()
+    u_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    v_count = db.execute("SELECT COUNT(*) FROM votes").fetchone()[0]
     db.close()
-    
-    return render_template("admin_dashboard.html", 
-                           total_users=users_row[0] if users_row else 0, 
-                           total_votes=votes_row[0] if votes_row else 0)
+    return render_template("admin_dashboard.html", total_users=u_count, total_votes=v_count)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 
