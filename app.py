@@ -60,7 +60,7 @@ def vote_panel():
         return redirect("/login")
     return render_template("vote.html")
 
-@app.route("/vote", methods=["POST"])
+@app.route("/cast_vote", methods=["POST"])
 def cast_vote():
     groups = [
         "Beryl", "Chrystolite", "Coral", "Amber", "Lapiz Lazuli", 
