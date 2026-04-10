@@ -8,6 +8,20 @@ def get_db():
     db = sqlite3.connect('database.db')
     db.row_factory = sqlite3.Row
     return db
+    def init_db():
+    db = get_db()
+    db.execute('''CREATE TABLE IF NOT EXISTS votes 
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                   member_email TEXT, 
+                   group_name TEXT)''')
+    db.execute('''CREATE TABLE IF NOT EXISTS users 
+                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                   email TEXT, 
+                   password TEXT)''')
+    db.commit()
+    db.close()
+init_db()
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
