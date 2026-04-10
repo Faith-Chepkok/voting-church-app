@@ -1,24 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Vote</title>
-<link rel="stylesheet" href="/static/style.css">
-</head>
-
 <body>
-
-<div class="container">
-<h1>Church Voting System</h1>
-<h2>Your Assigned Group</h2>
-<form method="POST">
-<p><b>{{random_group}}</b></p>
-  <input type="hidden" name="group"
-    value="{{random_group}}">
-<button type="submit">Submit Vote</button>
-</form>
-  <br>
-  <a href="/">Back to Home</a>
-</div>
-
+    <h1>Church Voting System</h1>
+    <p>Click the button below to have the system assign your group by ballot.</p>
+    
+    <form action="/vote" method="POST">
+        <input type="submit" value="Cast My Ballot">
+    </form>
 </body>
 </html>
+
