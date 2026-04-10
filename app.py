@@ -80,13 +80,14 @@ def admin_dashboard():
     
     return render_template("admin_dashboard.html", total_users=users_count, total_votes=votes_count)
 
-@app.route("/results")
+@app.route("/results")  
 def results():
     db = get_db() 
     query = "SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name"
     results = db.execute(query).fetchall()
     db.close()
     return render_template("results.html", results=results)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
