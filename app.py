@@ -3,7 +3,8 @@ import random
 from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__)
-app.secret_key = "church_system_999"
+app.secret_key = "church_voting_system_2026"
+
 def get_db():
     db = sqlite3.connect('database.db')
     db.row_factory = sqlite3.Row
@@ -19,11 +20,11 @@ def init_db():
 init_db()
 
 @app.route("/")
-def index_page():
+def index_view():
     return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])
-def register_page():
+def register_view():
     if request.method == "POST":
         email = request.form.get("email")
         pw = request.form.get("password")
@@ -35,7 +36,7 @@ def register_page():
     return render_template("register.html")
 
 @app.route("/login", methods=["GET", "POST"])
-def login_page():
+def login_view():
     if request.method == "POST":
         email = request.form.get("email")
         pw = request.form.get("password")
@@ -44,18 +45,18 @@ def login_page():
         db.close()
         if user:
             session["user_email"] = email
-            return redirect("/ballot")
-        return "Invalid Login", 401
+            return redirect("/vote_panel")
+        return "Invalid Login Credentials", 401
     return render_template("login.html")
 
-@app.route("/ballot")
-def ballot_page():
+@app.route("/vote_panel")
+def vote_view():
     if "user_email" not in session:
         return redirect("/login")
     return render_template("vote.html")
 
-@app.route("/execute_vote", methods=["POST"])
-def execute_vote():
+@app.route("/submit_ballot", methods=["POST"])
+def submit_ballot():
     groups = [
         "Beryl", "Chrystolite", "Coral", "Amber", "Lapiz Lazuli", "Ruby", "Carnelian", 
         "Topaz", "Pearl", "Sardonyx", "Sapphire", "Amethyst", "Jacinth", "Turquoise", 
@@ -65,31 +66,32 @@ def execute_vote():
     ]
     assigned = random.choice(groups)
     email = session.get("user_email")
+    
     db = get_db()
     db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, assigned))
     db.commit()
     db.close()
     return redirect("/results")
 @app.route("/results")
-def results_page():
+def results_view():
     db = get_db()
     data = db.execute("SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name ORDER BY total DESC").fetchall()
     db.close()
     return render_template("results.html", results=data)
 
 @app.route("/admin", methods=["GET", "POST"])
-def admin_login_page():
+def admin_login_view():
     if request.method == "POST":
         u = request.form.get("username")
         p = request.form.get("password")
         if u == "admin" and p == "admin123":
-            session["is_admin"] = True
+            session["admin_logged_in"] = True
             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
 
 @app.route("/admin_dashboard")
-def admin_dashboard_page():
-    if not session.get("is_admin"):
+def admin_dashboard_view():
+    if not session.get("admin_logged_in"):
         return redirect("/admin")
     db = get_db()
     u_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
@@ -99,6 +101,7 @@ def admin_dashboard_page():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
 
