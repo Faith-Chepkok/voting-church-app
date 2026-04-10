@@ -32,7 +32,9 @@ def vote():
         return redirect("/results")
 
     return render_template("vote.html", existing=existing)
-
+    @app.route("/")
+def home():
+    return render_template("index.html") 
 @app.route("/admin", methods=["GET", "POST"])         
 def admin():
     if request.method == "POST":
