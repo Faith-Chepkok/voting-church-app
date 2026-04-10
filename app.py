@@ -8,9 +8,9 @@ def get_db():
     db = sqlite3.connect('database.db')
     db.row_factory = sqlite3.Row
     return db
-    def init_db():
-      db = get_db()
-      db.execute('''CREATE TABLE IF NOT EXISTS votes 
+def init_db():
+    db = get_db()
+    db.execute('''CREATE TABLE IF NOT EXISTS votes 
                   (id INTEGER PRIMARY KEY AUTOINCREMENT, 
                    member_email TEXT, 
                    group_name TEXT)''')
