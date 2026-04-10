@@ -9,10 +9,6 @@ def get_db():
     db.row_factory = sqlite3.Row
     return db
 
-@app.route("/")
-def home():
-    return redirect("/vote")
-
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
     db = get_db()
