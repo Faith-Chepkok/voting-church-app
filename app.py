@@ -54,6 +54,11 @@ def login():
             return render_template("vote.html") 
         return "Invalid Login", 401
     return render_template("login.html")
+@app.route("/vote_panel")
+def vote_panel():
+    if "user_email" not in session:
+        return redirect("/login")
+    return render_template("vote.html")
 
 @app.route("/vote", methods=["POST"])
 def cast_vote():
