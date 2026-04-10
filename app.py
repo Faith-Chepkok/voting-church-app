@@ -1,26 +1,21 @@
-import sqlite3 
-from flask import Flask, render_template, request, redirect, session
+import sqlite3
 import random
+from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__)
 app.secret_key = "super_secret_key" 
+def get_db():
+    db = sqlite3.connect('database.db')
+    db.row_factory = sqlite3.Row
+    return db
+
 @app.route("/")
 def home():
     return redirect("/vote")
 
-
 @app.route("/vote", methods=["GET", "POST"])
 def vote():
     db = get_db()
-    import sqlite3
-
-def get_db():
-    
-    db = sqlite3.connect('database.db')
-    db.row_factory = sqlite3.Row
-    return db
-    return render_template("vote.html")
-    
     existing = False 
 
     if request.method == "POST":
@@ -33,10 +28,10 @@ def get_db():
         random_name = random.choice(groups)
         db.execute("INSERT INTO votes (member_email, group_name) VALUES (?, ?)", (email, random_name))
         db.commit()
+        db.close()
         return redirect("/results")
 
     return render_template("vote.html", existing=existing)
-
 
 @app.route("/admin", methods=["GET", "POST"])         
 def admin():
@@ -44,7 +39,7 @@ def admin():
         username = request.form.get("username")
         password = request.form.get("password")
         
-    if username == "admin" and password == "admin123":
+        if username == "admin" and password == "admin123":
             session["admin"] = True
             return redirect("/admin_dashboard")
             
@@ -59,18 +54,20 @@ def admin_dashboard():
     
     votes_row = db.execute("SELECT COUNT(*) FROM votes").fetchone()
     votes_count = votes_row[0] if votes_row else 0
+    db.close()
     
     return render_template("admin_dashboard.html", total_users=users_count, total_votes=votes_count)
 
 @app.route("/results")
 def results():
-    db = get_db()
-    
+    db = get_db() 
     query = "SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name"
     results = db.execute(query).fetchall()
+    db.close()
     return render_template("results.html", results=results)
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
