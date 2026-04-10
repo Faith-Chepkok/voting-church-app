@@ -27,6 +27,37 @@ init_db()
 
 @app.route("/")
 def home():
+    return render_template("index.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        db = get_db()
+        db.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, password))
+        db.commit()
+        db.close()
+        return redirect("/login") 
+    return render_template("register.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        db = get_db()
+        user = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, password)).fetchone()
+        db.close()
+        if user:
+            session["user_email"] = email
+            return render_template("vote.html") 
+        return "Invalid Login", 401
+    return render_template("login.html")
+
+
+@app.route("/")
+def home():
     return render_template("vote.html")
 
 @app.route("/vote", methods=["POST"])
