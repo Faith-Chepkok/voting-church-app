@@ -19,7 +19,7 @@ def get_db():
     db = sqlite3.connect('database.db')
     db.row_factory = sqlite3.Row
     return db
-
+    return render_template("vote.html")
     
     existing = False 
 
