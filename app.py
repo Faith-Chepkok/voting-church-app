@@ -22,24 +22,22 @@ init_db()
 @app.route("/")
 def index_view():
     return render_template("index.html")
-
 @app.route("/register", methods=["GET", "POST"])
 def register_view():
     if request.method == "POST":
         email = request.form.get("email")
-        pw = request.form.get("password")
+        password= request.form.get("password")
         db = get_db()
-        db.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, pw))
+        db.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, passsword))
         db.commit()
         db.close()
         return redirect("/login")
     return render_template("register.html")
-
 @app.route("/login", methods=["GET", "POST"])
 def login_view():
     if request.method == "POST":
         email = request.form.get("email")
-        pw = request.form.get("password")
+        password = request.form.get("password")
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE email = ? AND password = ?", (email, pw)).fetchone()
         db.close()
@@ -48,13 +46,11 @@ def login_view():
             return redirect("/vote_panel")
         return "Invalid Login Credentials", 401
     return render_template("login.html")
-
 @app.route("/vote_panel")
 def vote_view():
     if "user_email" not in session:
         return redirect("/login")
     return render_template("vote.html")
-
 @app.route("/submit_ballot", methods=["POST"])
 def submit_ballot():
     groups = [
@@ -78,13 +74,12 @@ def results_view():
     data = db.execute("SELECT group_name, COUNT(*) as total FROM votes GROUP BY group_name ORDER BY total DESC").fetchall()
     db.close()
     return render_template("results.html", results=data)
-
 @app.route("/admin", methods=["GET", "POST"])
 def admin_login_view():
     if request.method == "POST":
-        u = request.form.get("username")
-        p = request.form.get("password")
-        if u == "admin" and p == "admin123":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if username == "admin" and password == "admin123":
             session["admin_logged_in"] = True
             return redirect("/admin_dashboard")
     return render_template("admin_login.html")
@@ -94,8 +89,8 @@ def admin_dashboard_view():
     if not session.get("admin_logged_in"):
         return redirect("/admin")
     db = get_db()
-    u_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
-    v_count = db.execute("SELECT COUNT(*) FROM votes").fetchone()[0]
+    users_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    votes_count = db.execute("SELECT COUNT(*) FROM votes").fetchone()[0]
     db.close()
     return render_template("admin_dashboard.html", total_users=u_count, total_votes=v_count)
 
